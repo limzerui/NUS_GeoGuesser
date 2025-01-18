@@ -170,8 +170,14 @@ export default function AltGamePage() {
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
 
+type Place = {
+  lat: number;
+  lng: number;
+  label: string;
+  images: string[];
+};
   // Current location object
-  const [currentPlace, setCurrentPlace] = useState<any>(null);
+  const [currentPlace, setCurrentPlace] = useState<Place | null>(null);
 
   // The correct location's pixel coords
   const [correctPin, setCorrectPin] = useState<{ x: number; y: number } | null>(
