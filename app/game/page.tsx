@@ -203,7 +203,7 @@ function pickRandomPlace() {
   }
 */
   // When user clicks on the map, set the guess pin
-  function handleMapClick(e) {
+  function handleMapClick(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
