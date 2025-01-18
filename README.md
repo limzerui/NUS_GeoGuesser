@@ -1,31 +1,15 @@
----
+
 
 # NUS GeoGuesser
 
-**NUS GeoGuesser** is an application made within 12 hours for a hackathon - Hack&Roll. It is a fun, interactive web application that challenges you to guess locations across the National University of Singapore (NUS) campus. It offers **two distinct game modes**, each with unique mechanics and levels of difficulty. The application is deployed on [Vercel](https://nus-geo-guesser-2-o9raeei99-zeruis-projects-638c0957.vercel.app/), making it easily accessible to anyone.
-
----
-
-## Table of Contents
-1. [Features](#features)
-2. [Game Modes](#game-modes)
-    - [Classic Mode](#classic-mode)
-    - [Alt-Game Mode](#alt-game-mode)
-3. [Scoring & Leaderboard](#scoring--leaderboard)
-4. [Scaling of Difficulty](#scaling-of-difficulty)
-5. [Tech Stack](#tech-stack)
-6. [Deployment](#deployment)
-7. [Getting Started (Local Development)](#getting-started-local-development)
-8. [Future Enhancements](#future-enhancements)
-9. [Contributing](#contributing)
-10. [License](#license)
+**NUS GeoGuesser** is a hackathon project done in 12 hours for Hack&Roll. It is a fun, interactive web application that challenges you to guess locations across the National University of Singapore (NUS) campus. It offers **two distinct game modes**, each with unique mechanics and levels of difficulty. The application is deployed on [Vercel](https://nus-geo-guesser-2-o9raeei99-zeruis-projects-638c0957.vercel.app/), making it easily accessible to anyone.
 
 ---
 
 ## Features
 
 - **Two Distinct Game Modes**: Choose between the “Classic” Street View-based mode or the image-based “Alt-Game” mode.
-- **Progressive Rounds**: Each game consists of a series of rounds (e.g. 5). Your points accumulate to a final score.
+- **Progressive Rounds**: Each game consists of a series of rounds (e.g., 5). Your points accumulate to a final score.
 - **Difficulty Scaling**:  
   - **Classic Mode**: Start zoomed in at a random Street View location. Each guess transitions you to the next round.  
   - **Alt-Game Mode**: Three images for each location, offering increasing clarity (first image is the trickiest, last image is the easiest).
@@ -128,4 +112,4 @@ This project is available under the **MIT License**. See the [LICENSE](LICENSE) 
 
 ---
 
-Enjoy exploring NUS with **NUS GeoGuesser**! If you have feedback or ideas, you’re welcome to contribute or reach out.
+**Enjoy exploring NUS with NUS GeoGuesser!** If you have feedback or ideas, you’re welcome to contribute or reach out.
