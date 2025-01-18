@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 // 1) Define bounding box and map dimensions:
 const boundingBox = {
-  minLat: 1.290643, // Adjust these
+  minLat: 1.290643, 
   maxLat: 1.307454,
   minLng: 103.766688,
   maxLng: 103.788455,
@@ -28,41 +29,13 @@ function latLngToPixel(lat, lng) {
 
 // 2) Places array with real lat/lng
 const places = [
-  {
-    lat: 1.2986334,
-    lng: 103.7715247,
-    label: "Engineering",
-  },
-  {
-    lat: 1.3068482,
-    lng: 103.773275,
-    label: "NUSC",
-  },
-  {
-    lat: 1.2907101,
-    lng: 103.781023,
-    label: "PGP",
-  },
-  {
-    lat: 1.2950454,
-    lng: 103.7748951,
-    label: "COM3",
-  },
-  {
-    lat: 1.2959847,
-    lng: 103.7791716,
-    label: "Science",
-  },
-  {
-    lat: 1.292383,
-    lng: 103.774028,
-    label: "Business",
-  },
-  {
-    lat: 1.2942524,
-    lng: 103.7714807,
-    label: "FASS",
-  },
+  { lat: 1.2986334, lng: 103.7715247, label: "Engineering" },
+  { lat: 1.3068482, lng: 103.773275, label: "NUSC" },
+  { lat: 1.2907101, lng: 103.781023, label: "PGP" },
+  { lat: 1.2950454, lng: 103.7748951, label: "COM3" },
+  { lat: 1.2959847, lng: 103.7791716, label: "Science" },
+  { lat: 1.292383, lng: 103.774028, label: "Business" },
+  { lat: 1.2942524, lng: 103.7714807, label: "FASS" },
 ];
 
 function Modal({ message, onClose }) {
@@ -110,6 +83,7 @@ function Modal({ message, onClose }) {
 }
 
 export default function GamePage() {
+  const router = useRouter();      // <-- For redirection
   const [score, setScore] = useState(0);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [currentPlace, setCurrentPlace] = useState(null);
@@ -199,29 +173,51 @@ export default function GamePage() {
     // Example scoring logic
     if (distance < 50) {
       setScore(score + 1);
-      setModalMessage(`Nice job! You were ${distance.toFixed(2)} pixels away. Score now: ${score + 1}`);
+      setModalMessage(
+        `Nice job! You were ${distance.toFixed(
+          2
+        )} pixels away. Score now: ${score + 1}`
+      );
     } else {
-      setModalMessage(`Too far! You were ${distance.toFixed(2)} pixels away. Score remains: ${score}`);
+      setModalMessage(
+        `Too far! You were ${distance.toFixed(
+          2
+        )} pixels away. Score remains: ${score}`
+      );
     }
   }
 
+  /**
+   * We remove the logic that automatically closes the map 
+   * if the user clicks outside of it. Hence the map stays open
+   * (and the guess remains) even after submission.
+   */
+  // useEffect(() => {
+  //   if (mapExpanded) document.addEventListener("click", handleOutsideClick);
+  //   else document.removeEventListener("click", handleOutsideClick);
+  //   return () => document.removeEventListener("click", handleOutsideClick);
+  // }, [mapExpanded]);
+
+  // function handleOutsideClick(e) {
+  //   if (mapExpanded && !e.target.closest(".map-container")) {
+  //     setMapExpanded(false);
+  //     setUserPin(null);
+  //   }
+  // }
+
+  /**
+   * After 5 rounds, redirect to homepage. 
+   * Otherwise, proceed to the next round as before.
+   */
   function handleNextRound() {
-    setShowCorrectPin(false);
-    setRound(round + 1); // Increment the round
-    pickRandomPlace();
-  }
-
-  useEffect(() => {
-    if (mapExpanded) document.addEventListener("click", handleOutsideClick);
-    else document.removeEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
-  }, [mapExpanded]);
-
-  function handleOutsideClick(e) {
-    if (mapExpanded && !e.target.closest(".map-container")) {
-      setMapExpanded(false);
-      setUserPin(null);
+    if (round === 5) {
+      // Redirect to homepage after 5 rounds
+      router.push("/");
+      return;
     }
+    setShowCorrectPin(false);
+    setRound(round + 1);
+    pickRandomPlace();
   }
 
   return (
@@ -278,6 +274,7 @@ export default function GamePage() {
                 backgroundColor: "red",
                 borderRadius: "50%",
                 transform: "translate(-50%, -50%)",
+                zIndex: 2102,
               }}
             />
           )}
@@ -335,6 +332,25 @@ export default function GamePage() {
               Next Round
             </button>
           )}
+
+          {/* Optional: A separate "Close Map" button if needed */}
+          <button
+            onClick={() => setMapExpanded(false)}
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              left: "10px",
+              zIndex: 2102,
+              backgroundColor: "gray",
+              color: "white",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Close Map
+          </button>
         </div>
       )}
 
