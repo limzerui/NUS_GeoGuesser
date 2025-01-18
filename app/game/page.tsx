@@ -11,8 +11,6 @@ type Place = {
   label: string;
 };
 
-// Update the state type
-const [currentPlace, setCurrentPlace] = useState<Place | null>(null);
 
 // 1) Define bounding box and map dimensions:
 const boundingBox = {
