@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+// Define Place type
+type Place = {
+  lat: number;
+  lng: number;
+  label: string;
+};
+
+// Update the state type
+const [currentPlace, setCurrentPlace] = useState<Place | null>(null);
 
 // 1) Define bounding box and map dimensions:
 const boundingBox = {
@@ -152,19 +161,22 @@ export default function GamePage() {
       initStreetView();
     }
   }, [mapLoaded, currentPlace]);
+// Define the state
+const [currentPlace, setCurrentPlace] = useState<Place | null>(null);
 
-  function pickRandomPlace() {
-    const place = places[Math.floor(Math.random() * places.length)];
-    setCurrentPlace(place);
+function pickRandomPlace() {
+  const place = places[Math.floor(Math.random() * places.length)];
+  setCurrentPlace(place);
 
-    // Convert lat/lng to pixel coords on the map
-    const coords = latLngToPixel(place.lat, place.lng);
-    setCorrectPin(coords);
+  // Convert lat/lng to pixel coords on the map
+  const coords = latLngToPixel(place.lat, place.lng);
+  setCorrectPin(coords);
 
-    // Reset guess & hide correct pin for the new round
-    setUserPin(null);
-    setShowCorrectPin(false);
-  }
+  // Reset guess & hide correct pin for the new round
+  setUserPin(null);
+  setShowCorrectPin(false);
+}
+
 
   function initStreetView() {
     if (!currentPlace) return;
