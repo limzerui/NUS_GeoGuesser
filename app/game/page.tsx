@@ -127,7 +127,7 @@ export default function GamePage() {
   const [round, setRound] = useState(1);
 
   // We'll store the correct location's pixel coords for the current place
-  const [correctPin, setCorrectPin] = useState<{x:Number; y:number} | null>(null);
+  const [correctPin, setCorrectPin] = useState<{x:number; y:number} | null>(null);
 
   // The user's guess in pixel coords
   const [userPin, setUserPin] = useState<{x:number;y:number} | null>(null);
@@ -140,6 +140,16 @@ export default function GamePage() {
 
   // Modal state
   const [modalMessage, setModalMessage] = useState<string | null>(null);
+
+const initStreetView = useCallback(() => {
+    if (!currentPlace) return;
+    new google.maps.StreetViewPanorama(document.getElementById("street-view"), {
+      position: { lat: currentPlace.lat, lng: currentPlace.lng },
+      pov: { heading: 165, pitch: 0 },
+      zoom: 1,
+      disableDefaultUI: true,
+    });
+  }, [currentPlace]);
 
   // Check for Google Maps script & pick a random place initially
   useEffect(() => {
