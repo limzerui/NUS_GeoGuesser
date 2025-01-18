@@ -82,12 +82,45 @@ function Modal({ message, onClose }) {
   );
 }
 
+/**
+ * Returns an integer score between 0 and 1000 based on distance:
+ * - distance <= 50px --> 1000 points
+ * - distance >= 500px --> 0 points
+ * - else linear interpolation in [50..500] => [1000..0]
+ */
+function getGuessScore(distance) {
+  if (distance <= 50) return 1000;
+  if (distance >= 500) return 0;
+  const ratio = (500 - distance) / 450; // 500-50 = 450
+  return Math.round(1000 * ratio);
+}
+
+//ADDED HERE
+function saveScoresToLeaderboard(finalScore) {
+  // Retrieve the leaderboard from localStorage or create a default object
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {
+    highestScore: 0,
+    mostRecentScore: 0,
+  };
+
+  // Update the most recent score
+  leaderboard.mostRecentScore = finalScore;
+
+  // Update the highest score if the current score is higher
+  if (finalScore > leaderboard.highestScore) {
+    leaderboard.highestScore = finalScore;
+  }
+
+  // Save the updated leaderboard back to localStorage
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+}
+
 export default function GamePage() {
   const router = useRouter();
   const [score, setScore] = useState(0);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [currentPlace, setCurrentPlace] = useState(null);
-  const [round, setRound] = useState(1); // Track current round
+  const [round, setRound] = useState(1);
 
   // We'll store the correct location's pixel coords for the current place
   const [correctPin, setCorrectPin] = useState(null);
@@ -98,14 +131,14 @@ export default function GamePage() {
   // Control whether the map is expanded
   const [mapExpanded, setMapExpanded] = useState(false);
 
-  // Only show the correct pin (green pin / emoji) after pressing "Submit Guess"
+  // Only show the correct pin (emoji) after pressing "Submit Guess"
   const [showCorrectPin, setShowCorrectPin] = useState(false);
 
   // Modal state
   const [modalMessage, setModalMessage] = useState(null);
 
+  // Check for Google Maps script & pick a random place initially
   useEffect(() => {
-    // Check for Google Maps script
     const checkGoogleMaps = setInterval(() => {
       if (typeof google !== "undefined") {
         setMapLoaded(true);
@@ -116,29 +149,26 @@ export default function GamePage() {
     pickRandomPlace();
   }, []);
 
+  // Initialize Street View once it's loaded
   useEffect(() => {
     if (mapLoaded && currentPlace) {
       initStreetView();
     }
   }, [mapLoaded, currentPlace]);
 
-  // Randomly pick a place from 'places' and update correctPin
   function pickRandomPlace() {
     const place = places[Math.floor(Math.random() * places.length)];
     setCurrentPlace(place);
 
-    // Compute correct location in pixel coords (on the JPG)
+    // Convert lat/lng to pixel coords on the map
     const coords = latLngToPixel(place.lat, place.lng);
     setCorrectPin(coords);
 
-    // Clear previous guess
+    // Reset guess & hide correct pin for the new round
     setUserPin(null);
-
-    // Hide the correct pin until they guess again
     setShowCorrectPin(false);
   }
 
-  // Initialize the Street View
   function initStreetView() {
     if (!currentPlace) return;
     new google.maps.StreetViewPanorama(document.getElementById("street-view"), {
@@ -156,7 +186,7 @@ export default function GamePage() {
     });
   }
 
-  // Handle map click, update the user's guess pin
+  // When user clicks on the map, set the guess pin
   function handleMapClick(e) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -164,29 +194,14 @@ export default function GamePage() {
     setUserPin({ x, y });
   }
 
-  // Calculate the guess score from 0..1000
-  function getGuessScore(distance) {
-    if (distance <= 50) {
-      return 1000;
-    } else if (distance >= 500) {
-      return 0;
-    } else {
-      // Linear interpolation from 50..500 => 1000..0
-      const ratio = (500 - distance) / (500 - 50); // (450 range)
-      return Math.round(1000 * ratio);
-    }
-  }
-
-  // Handle guess submission
+  // Submit Guess => calculate score, show correct pin, show modal
   function handleSubmitGuess() {
     if (!userPin || !correctPin) return;
 
-    // Distance in pixels between guess and correct pin
     const dx = userPin.x - correctPin.x;
     const dy = userPin.y - correctPin.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // Reveal the correct pin now
     setShowCorrectPin(true);
 
     // Compute the round's score
@@ -194,21 +209,43 @@ export default function GamePage() {
     const newTotalScore = score + guessScore;
     setScore(newTotalScore);
 
-    // Show a modal with results
     setModalMessage(
       `You were ${distance.toFixed(
         2
-      )} pixels away. You earned ${guessScore} points. Your total score is now: ${newTotalScore}`
+      )} pixels away. You earned ${guessScore} points. Total score: ${newTotalScore}`
     );
+
+    // Note: We do NOT clear userPin here,
+    // so the user's guess remains on the map.
   }
 
-  // Advance to the next round (or end the game after 5 rounds)
+  // After 5 rounds, redirect. Otherwise, next round
   function handleNextRound() {
     if (round === 5) {
-      // Redirect to homepage after 5 rounds
+      // We’ve just finished the 5th round, so store the final score.
+      const finalScore = score;
+
+      // Store “most recent score”
+      localStorage.setItem("mostRecentScore", finalScore.toString());
+
+      // Compare with existing “highest score”, if any
+      const storedHighScore = localStorage.getItem("highestScore");
+      if (storedHighScore === null) {
+        // If there is no highestScore yet, set it
+        localStorage.setItem("highestScore", finalScore.toString());
+      } else {
+        const highestScore = parseInt(storedHighScore, 10);
+        if (finalScore > highestScore) {
+          localStorage.setItem("highestScore", finalScore.toString());
+        }
+      }
+
+      // Redirect to homepage
       router.push("/");
       return;
     }
+
+    // Otherwise, normal next-round logic
     setShowCorrectPin(false);
     setRound(round + 1);
     pickRandomPlace();
@@ -224,7 +261,7 @@ export default function GamePage() {
       {/* Street View container */}
       <div id="street-view" style={{ height: "100%", width: "100%" }} />
 
-      {/* Score and guess button panel */}
+      {/* Score and Round Info */}
       <div
         style={{
           position: "absolute",
@@ -241,7 +278,7 @@ export default function GamePage() {
         <button onClick={() => setMapExpanded(true)}>Map Guess</button>
       </div>
 
-      {/* Map overlay to place guesses */}
+      {/* Map container overlay */}
       {mapExpanded && (
         <div
           className="map-container"
@@ -249,7 +286,7 @@ export default function GamePage() {
             position: "absolute",
             top: "50px",
             left: "50px",
-            width: "800px", // Real size for accurate click detection
+            width: "800px", // real size
             height: "600px",
             border: "2px solid black",
             zIndex: 2000,
@@ -258,7 +295,7 @@ export default function GamePage() {
         >
           <Image src="/map.jpg" alt="Map" fill style={{ objectFit: "cover" }} />
 
-          {/* User's guess pin (red) */}
+          {/* User's guess pin (red) - remains even after submit */}
           {userPin && (
             <div
               style={{
@@ -275,7 +312,7 @@ export default function GamePage() {
             />
           )}
 
-          {/* Correct pin (emoji) */}
+          {/* Correct pin (emoji) - shown only after submit */}
           {showCorrectPin && correctPin && (
             <div
               style={{
@@ -291,32 +328,31 @@ export default function GamePage() {
             </div>
           )}
 
-          {/* Submit Guess Button */}
-          <button
-            onClick={handleSubmitGuess}
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              zIndex: 2102,
-              backgroundColor: "blue",
-              color: "white",
-              padding: "8px 16px",
-              borderRadius: "4px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Submit Guess
-          </button>
-
-          {/* Next Round Button (only after guess is submitted) */}
-          {showCorrectPin && (
+          {/* Conditionally render buttons */}
+          {!showCorrectPin ? (
+            <button
+              onClick={handleSubmitGuess}
+              style={{
+                position: "absolute",
+                top: "10px",
+                left: "10px",
+                zIndex: 2102,
+                backgroundColor: "blue",
+                color: "white",
+                padding: "8px 16px",
+                borderRadius: "4px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Submit Guess
+            </button>
+          ) : (
             <button
               onClick={handleNextRound}
               style={{
                 position: "absolute",
-                top: "50px",
+                top: "10px",
                 left: "10px",
                 zIndex: 2102,
                 backgroundColor: "green",
@@ -331,7 +367,7 @@ export default function GamePage() {
             </button>
           )}
 
-          {/* Optional Close Map Button */}
+          {/* Close Map Button */}
           <button
             onClick={() => setMapExpanded(false)}
             style={{

@@ -86,8 +86,8 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Start Game Button */}
-      <Link href="/game" passHref>
+       {/* Start Game Button */}
+       <Link href="/game" passHref>
         <button
           style={{
             padding: "15px 30px",
@@ -98,9 +98,28 @@ export default function Home() {
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
+            marginBottom: "10px",
           }}
         >
           Start Game
+        </button>
+      </Link>
+
+      {/* Alt Game Button */}
+      <Link href="/alt-game" passHref>
+        <button
+          style={{
+            padding: "15px 30px",
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            color: "#fff",
+            backgroundColor: "#28a745", // Green colour for differentiation
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Alternative Game
         </button>
       </Link>
     </div>
