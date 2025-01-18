@@ -10,26 +10,18 @@ export default function Home() {
   const [altMostRecentScore, setAltMostRecentScore] = useState<number | null>(null);
 
   useEffect(() => {
-    // Load Classic Mode scores from localStorage
-    const storedClassicHigh = localStorage.getItem("classicHighestScore");
-    const storedClassicRecent = localStorage.getItem("classicMostRecentScore");
-
-    if (storedClassicHigh !== null) {
-      setClassicHighestScore(parseInt(storedClassicHigh, 10));
-    }
-    if (storedClassicRecent !== null) {
-      setClassicMostRecentScore(parseInt(storedClassicRecent, 10));
+    // To load Classic Mode scores from localStorage
+    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard"));
+    if (classicLeaderboard) {
+      setClassicHighestScore(classicLeaderboard.highestScore);
+      setClassicMostRecentScore(classicLeaderboard.mostRecentScore);
     }
 
-    // Load Close-Up Challenge scores from localStorage
-    const storedAltHigh = localStorage.getItem("altHighestScore");
-    const storedAltRecent = localStorage.getItem("altMostRecentScore");
-
-    if (storedAltHigh !== null) {
-      setAltHighestScore(parseInt(storedAltHigh, 10));
-    }
-    if (storedAltRecent !== null) {
-      setAltMostRecentScore(parseInt(storedAltRecent, 10));
+    // To load Close-Up Challenge scores from localStorage
+    const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard"));
+    if (altLeaderboard) {
+      setAltHighestScore(altLeaderboard.highestScore);
+      setAltMostRecentScore(altLeaderboard.mostRecentScore);
     }
   }, []);
 
@@ -42,19 +34,19 @@ export default function Home() {
         justifyContent: "center",
         height: "100vh",
         fontFamily: "'Arial', sans-serif",
-        backgroundColor: "#F8F9FA", // Light grey background
+        backgroundColor: "#F8F9FA", 
       }}
     >
       <h1
         style={{
           fontSize: "3.5rem",
-          color: "#0057A8", // NUS Blue
+          color: "#0057A8", 
           marginBottom: "30px",
           textTransform: "uppercase",
           fontWeight: "bold",
         }}
       >
-        NUS Guesser
+        NUSGuessr Leaderboards
       </h1>
 
       {/* Classic Mode Leaderboard */}
@@ -64,17 +56,17 @@ export default function Home() {
           maxWidth: "500px",
           padding: "20px",
           marginBottom: "30px",
-          border: "2px solid #0057A8", // Blue border
+          border: "2px solid #0057A8", 
           borderRadius: "10px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)", // Slight shadow
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)", 
           textAlign: "center",
-          backgroundColor: "#FFFFFF", // White background
+          backgroundColor: "#FFFFFF", 
         }}
       >
         <h2
           style={{
             fontSize: "1.8rem",
-            color: "#F58025", // NUS Orange
+            color: "#F58025", 
             marginBottom: "20px",
             fontWeight: "bold",
           }}
@@ -153,7 +145,7 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Start Game Button */}
+      {/* Navigation Buttons */}
       <Link href="/game" passHref>
         <button
           style={{
@@ -174,7 +166,6 @@ export default function Home() {
         </button>
       </Link>
 
-      {/* Close-Up Challenge Button */}
       <Link href="/alt-game" passHref>
         <button
           style={{
@@ -196,6 +187,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 

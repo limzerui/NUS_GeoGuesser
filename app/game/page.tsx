@@ -31,7 +31,7 @@ function latLngToPixel(lat, lng) {
 const places = [
   { lat: 1.2986334, lng: 103.7715247, label: "Engineering" },
   { lat: 1.3068482, lng: 103.773275, label: "NUSC" },
-  { lat: 1.2907101, lng: 103.781023, label: "PGP" },
+  { lat: 1.291153, lng: 103.780383, label: "PGP" },
   { lat: 1.2950454, lng: 103.7748951, label: "COM3" },
   { lat: 1.2959847, lng: 103.7791716, label: "Science" },
   { lat: 1.292383, lng: 103.774028, label: "Business" },
@@ -95,25 +95,20 @@ function getGuessScore(distance) {
   return Math.round(1000 * ratio);
 }
 
-//ADDED HERE
 function saveScoresToLeaderboard(finalScore) {
-  // Retrieve the leaderboard from localStorage or create a default object
-  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {
-    highestScore: 0,
-    mostRecentScore: 0,
-  };
+  // Save scores specifically for Classic Mode
+  const storedHighScore = localStorage.getItem("classicHighestScore");
+  const storedRecentScore = localStorage.getItem("classicMostRecentScore");
 
-  // Update the most recent score
-  leaderboard.mostRecentScore = finalScore;
+  // Update most recent score
+  localStorage.setItem("classicMostRecentScore", finalScore.toString());
 
-  // Update the highest score if the current score is higher
-  if (finalScore > leaderboard.highestScore) {
-    leaderboard.highestScore = finalScore;
+  // Update highest score if needed
+  if (storedHighScore === null || finalScore > parseInt(storedHighScore, 10)) {
+    localStorage.setItem("classicHighestScore", finalScore.toString());
   }
-
-  // Save the updated leaderboard back to localStorage
-  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
 }
+
 
 
 export default function GamePage() {
@@ -220,38 +215,35 @@ export default function GamePage() {
     // so the user's guess remains on the map.
   }
 
-  // After 5 rounds, redirect. Otherwise, next round
-  function handleNextRound() {
+function handleNextRound() {
   if (round === 5) {
-    // We’ve just finished the 5th round, so store the final score.
+    // Final score after 5 rounds
     const finalScore = score;
 
-    // Store “most recent score”
-    localStorage.setItem("mostRecentScore", finalScore.toString());
+    // Retrieve current leaderboard or initialise it
+    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard")) || {
+      highestScore: 0,
+      mostRecentScore: 0,
+    };
 
-    // Compare with existing “highest score”, if any
-    const storedHighScore = localStorage.getItem("highestScore");
-    if (storedHighScore === null) {
-      // If there is no highestScore yet, set it
-      localStorage.setItem("highestScore", finalScore.toString());
-    } else {
-      const highestScore = parseInt(storedHighScore, 10);
-      if (finalScore > highestScore) {
-        localStorage.setItem("highestScore", finalScore.toString());
-      }
+    // Update leaderboard data
+    classicLeaderboard.mostRecentScore = finalScore;
+    if (finalScore > classicLeaderboard.highestScore) {
+      classicLeaderboard.highestScore = finalScore;
     }
+
+    // Save updated leaderboard back to localStorage
+    localStorage.setItem("classicLeaderboard", JSON.stringify(classicLeaderboard));
 
     // Redirect to homepage
     router.push("/");
     return;
   }
 
-  // Otherwise, normal next-round logic
-  setShowCorrectPin(false);
+  // Continue to next round
   setRound(round + 1);
   pickRandomPlace();
 }
-
 
   return (
     <div style={{ height: "100vh", position: "relative" }}>

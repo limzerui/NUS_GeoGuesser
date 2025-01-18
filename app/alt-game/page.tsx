@@ -28,16 +28,16 @@ function latLngToPixel(lat: number, lng: number) {
 }
 
 // 2) Places array with lat/lng + array of 3 images
-//    Reordered so that (1.jpg) -> (3.jpg) -> (2.jpg)
+//    Reordered so that (1.jpg) -> (2.jpg) -> (3.jpg)
 const altPlaces = [
   {
     lat: 1.304203,
     lng: 103.7736519,
     label: "Fine Food",
     images: [
-      "/alt-maps/finefood1.jpg", // Shown first (index 0)
-      "/alt-maps/finefood2.jpg", // Shown last (index 2)
-      "/alt-maps/finefood3.jpg", // Shown second (index 1)
+      "/alt-maps/finefood1.jpg", // index 0
+      "/alt-maps/finefood2.jpg", // index 1
+      "/alt-maps/finefood3.jpg", // index 2
     ],
   },
   {
@@ -46,15 +46,62 @@ const altPlaces = [
     label: "UtownBusStop",
     images: [
       "/alt-maps/utownbusstop1.jpg", // index 0
-      "/alt-maps/utownbusstop3.jpg", // index 1
-      "/alt-maps/utownbusstop2.jpg", // index 2
+      "/alt-maps/utownbusstop2.jpg", // index 1
+      "/alt-maps/utownbusstop3.jpg", // index 2
     ],
   },
-  // ... Repeat for other places
+  {
+    lat: 1.30087,
+    lng:103.77166,
+    label: "EA",
+    images: [
+      "/alt-maps/EA1.jpg", // index 0
+      "/alt-maps/EA2.jpg", // index 1
+      "/alt-maps/EA3.jpg", // index 2
+    ]
+  },
+  {
+    lat: 1.29995,
+    lng:103.77529,
+    label: "USC",
+    images: [
+      "/alt-maps/usc1.jpg", // index 0
+      "/alt-maps/usc2.jpg", // index 1
+      "/alt-maps/usc3.jpg", // index 2
+    ]
+  },
+
+  {
+    lat: 1.29377,
+    lng:103.77042,
+    label: "Eusoff",
+    images: [
+      "/alt-maps/eusoff1.jpg", // index 0
+      "/alt-maps/eusoff2.jpg", // index 1
+      "/alt-maps/eusoff3.jpg", // index 2
+    ]
+  },
+  {
+    lat: 1.29450,
+    lng:103.78418,
+    label: "NUH",
+    images: [
+      "/alt-maps/nuh1.jpg", // index 0
+      "/alt-maps/nuh2.jpg", // index 1
+      "/alt-maps/nuh3.jpg", // index 2
+    ]
+  },
+  // ... add more places if needed
 ];
 
 // Simple modal for displaying info
-function Modal({ message, onClose }: { message: string; onClose: () => void }) {
+function Modal({
+  message,
+  onClose,
+}: {
+  message: string;
+  onClose: () => void;
+}) {
   return (
     <div
       style={{
@@ -62,7 +109,7 @@ function Modal({ message, onClose }: { message: string; onClose: () => void }) {
         top: 0,
         left: 0,
         width: "100%",
-        height:"100%",
+        height: "100%",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         display: "flex",
         alignItems: "center",
@@ -98,6 +145,26 @@ function Modal({ message, onClose }: { message: string; onClose: () => void }) {
   );
 }
 
+// ADDED
+function saveScoresToLeaderboard(finalScore) {
+  // Retrieve the existing leaderboard or initialise with default values
+  const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard")) || {
+    highestScore: 0,
+    mostRecentScore: 0,
+  };
+
+  // Update the most recent score
+  altLeaderboard.mostRecentScore = finalScore;
+
+  // Update the highest score if the current score is greater
+  if (finalScore > altLeaderboard.highestScore) {
+    altLeaderboard.highestScore = finalScore;
+  }
+
+  // Save the updated leaderboard back to localStorage
+  localStorage.setItem("altLeaderboard", JSON.stringify(altLeaderboard));
+}
+
 export default function AltGamePage() {
   const router = useRouter();
   const [score, setScore] = useState(0);
@@ -123,7 +190,7 @@ export default function AltGamePage() {
   // Modal messages
   const [modalMessage, setModalMessage] = useState<string | null>(null);
 
-  // Track which “image index” (0,1,2) we’re currently showing for this place
+  // Track which “image index” (0,1,2) we’re currently showing
   const [imageIndex, setImageIndex] = useState(0);
 
   useEffect(() => {
@@ -143,13 +210,13 @@ export default function AltGamePage() {
     setUserPin(null);
     setShowCorrectPin(false);
 
-    // Start from the first image (index 0 => "1.jpg")
+    // Start from the first image (index 0)
     setImageIndex(0);
   }
 
   // Called each time user clicks “Next Hint”
-  // Moves from index 0 -> 1 -> 2 (max 2)
   function showNextImage() {
+    // Make sure not to exceed index 2
     if (imageIndex < 2) {
       setImageIndex(imageIndex + 1);
     }
@@ -162,9 +229,8 @@ export default function AltGamePage() {
     setUserPin({ x, y });
   }
 
-  // Example scoring logic: distance-based
+  // Example distance-based scoring logic
   function getDistanceScore(distance: number) {
-    // Base score from 0..1000
     if (distance <= 50) {
       return 1000;
     } else if (distance >= 500) {
@@ -184,6 +250,7 @@ export default function AltGamePage() {
     return 1.0;
   }
 
+  // Called when user clicks "Submit Guess"
   function handleSubmitGuess() {
     if (!userPin || !correctPin) return;
 
@@ -210,24 +277,27 @@ export default function AltGamePage() {
       )} pixels away. Base score: ${baseScore} × multiplier ${multiplier} = ${roundScore}. Total: ${newTotal}.`
     );
   }
-
-  // Move to the next round or end game after 5
+  
   function handleNextRound() {
-    if (round === 5) {
-      // Optionally store the final alt-game score
-      localStorage.setItem("altMostRecentScore", String(score));
-      // Compare to highest if needed ...
+  if (round === 5) {
+    // Final score after 5 rounds
+    const finalScore = score;
 
-      router.push("/");
-      return;
-    }
+    // Save scores to the leaderboard
+    saveScoresToLeaderboard(finalScore);
 
-    setRound(round + 1);
-    pickRandomPlace();
+    // Redirect to homepage
+    router.push("/");
+    return;
   }
 
+  // Continue to next round
+  setRound(round + 1);
+  pickRandomPlace();
+}
+  
+
   return (
-    
     <div style={{ height: "100vh", position: "relative" }}>
       {/* Modal */}
       {modalMessage && (
@@ -235,19 +305,18 @@ export default function AltGamePage() {
       )}
 
       {/* Header / Score display */}
-      
       <div
         style={{
           position: "absolute",
           top: "10px",
-          left: "10px",
+          right: "10px",
           zIndex: 1000,
           backgroundColor: "white",
           padding: "10px",
           borderRadius: "8px",
         }}
       >
-        <h2>Alt-Game</h2>
+        <h2>Close-Up Challenge</h2>
         <h3>Score: {score}</h3>
         <h4>Round: {round} / 5</h4>
       </div>
@@ -272,7 +341,7 @@ export default function AltGamePage() {
         </button>
       </Link>
 
-      {/* Main area: show the current image(s) */}
+      {/* Main area: current image(s) */}
       <div
         style={{
           width: "100%",
@@ -283,7 +352,6 @@ export default function AltGamePage() {
           justifyContent: "center",
         }}
       >
-        {/* Display the current image from currentPlace.images[imageIndex] */}
         {currentPlace && (
           <div
             style={{
@@ -304,9 +372,8 @@ export default function AltGamePage() {
           </div>
         )}
 
-        {/* Buttons to move to next image OR show map */}
+        {/* Buttons to move to next image (hint) OR show map */}
         <div style={{ marginTop: "20px" }}>
-          {/* Only show "Next Hint" button if we haven't reached the 3rd image */}
           {imageIndex < 2 && (
             <button
               onClick={showNextImage}
@@ -340,7 +407,7 @@ export default function AltGamePage() {
         </div>
       </div>
 
-      {/* Map pop-up (similar to original game) */}
+      {/* Map pop-up */}
       {mapExpanded && (
         <div
           className="map-container"
@@ -390,32 +457,31 @@ export default function AltGamePage() {
             </div>
           )}
 
-          {/* Submit Guess */}
-          <button
-            onClick={handleSubmitGuess}
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              zIndex: 2102,
-              backgroundColor: "blue",
-              color: "white",
-              padding: "8px 16px",
-              borderRadius: "4px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Submit Guess
-          </button>
-
-          {/* Next Round */}
-          {showCorrectPin && (
+          {/* Conditionally render Submit Guess vs. Next Round */}
+          {!showCorrectPin ? (
+            <button
+              onClick={handleSubmitGuess}
+              style={{
+                position: "absolute",
+                top: "10px",
+                left: "10px",
+                zIndex: 2102,
+                backgroundColor: "blue",
+                color: "white",
+                padding: "8px 16px",
+                borderRadius: "4px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Submit Guess
+            </button>
+          ) : (
             <button
               onClick={handleNextRound}
               style={{
                 position: "absolute",
-                top: "50px",
+                top: "10px",
                 left: "10px",
                 zIndex: 2102,
                 backgroundColor: "green",
