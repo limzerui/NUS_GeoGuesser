@@ -153,9 +153,9 @@ function Modal({
 }
 
 // ADDED
-function saveScoresToLeaderboard(finalScore) {
+function saveScoresToLeaderboard(finalScore:number) {
   // Retrieve the existing leaderboard or initialise with default values
-  const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard")) || {
+  const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard") || "{}") ||{
     highestScore: 0,
     mostRecentScore: 0,
   };
