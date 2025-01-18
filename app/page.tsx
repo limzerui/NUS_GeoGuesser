@@ -10,26 +10,18 @@ export default function Home() {
   const [altMostRecentScore, setAltMostRecentScore] = useState<number | null>(null);
 
   useEffect(() => {
-    // Load Classic Mode scores from localStorage
-    const storedClassicHigh = localStorage.getItem("classicHighestScore");
-    const storedClassicRecent = localStorage.getItem("classicMostRecentScore");
-
-    if (storedClassicHigh !== null) {
-      setClassicHighestScore(parseInt(storedClassicHigh, 10));
-    }
-    if (storedClassicRecent !== null) {
-      setClassicMostRecentScore(parseInt(storedClassicRecent, 10));
+    // Load Classic Mode leaderboard
+    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard"));
+    if (classicLeaderboard) {
+      setClassicHighestScore(classicLeaderboard.highestScore || 0);
+      setClassicMostRecentScore(classicLeaderboard.mostRecentScore || 0);
     }
 
-    // Load Close-Up Challenge scores from localStorage
-    const storedAltHigh = localStorage.getItem("altHighestScore");
-    const storedAltRecent = localStorage.getItem("altMostRecentScore");
-
-    if (storedAltHigh !== null) {
-      setAltHighestScore(parseInt(storedAltHigh, 10));
-    }
-    if (storedAltRecent !== null) {
-      setAltMostRecentScore(parseInt(storedAltRecent, 10));
+    // Load Close-Up Challenge leaderboard
+    const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard"));
+    if (altLeaderboard) {
+      setAltHighestScore(altLeaderboard.highestScore || 0);
+      setAltMostRecentScore(altLeaderboard.mostRecentScore || 0);
     }
   }, []);
 
@@ -54,7 +46,7 @@ export default function Home() {
           fontWeight: "bold",
         }}
       >
-        NUS Guesser
+        NUS Guesser Leaderboards
       </h1>
 
       {/* Classic Mode Leaderboard */}
@@ -153,7 +145,7 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Start Game Button */}
+      {/* Navigation Buttons */}
       <Link href="/game" passHref>
         <button
           style={{
@@ -174,7 +166,6 @@ export default function Home() {
         </button>
       </Link>
 
-      {/* Close-Up Challenge Button */}
       <Link href="/alt-game" passHref>
         <button
           style={{
@@ -196,6 +187,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 

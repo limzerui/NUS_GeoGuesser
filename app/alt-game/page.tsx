@@ -29,7 +29,7 @@ function latLngToPixel(lat: number, lng: number) {
 
 // 2) Places array with lat/lng + array of 3 images
 //    Reordered so that (1.jpg) -> (2.jpg) -> (3.jpg)
-const altPlaces = [
+const altPlaces: Place[] = [
   {
     lat: 1.304203,
     lng: 103.7736519,
@@ -205,6 +205,7 @@ type Place = {
 
   // Pick a random place, reset pins, etc.
   function pickRandomPlace() {
+    const randomIndex = Math.floor(Math.random() * altPlaces.length);
     const place = altPlaces[Math.floor(Math.random() * altPlaces.length)];
     setCurrentPlace(place);
 
