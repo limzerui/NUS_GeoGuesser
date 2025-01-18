@@ -160,7 +160,6 @@ export default function GamePage() {
     }
   }, [mapLoaded, currentPlace]);
 // Define the state
-const [currentPlace, setCurrentPlace] = useState<Place | null>(null);
 
 function pickRandomPlace() {
   const place = places[Math.floor(Math.random() * places.length)];
