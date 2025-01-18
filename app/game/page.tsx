@@ -123,14 +123,14 @@ export default function GamePage() {
   const router = useRouter();
   const [score, setScore] = useState(0);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [currentPlace, setCurrentPlace] = useState(null);
+  const [currentPlace, setCurrentPlace] = useState<Place | null>(null);
   const [round, setRound] = useState(1);
 
   // We'll store the correct location's pixel coords for the current place
-  const [correctPin, setCorrectPin] = useState(null);
+  const [correctPin, setCorrectPin] = useState<{x:Number; y:number} | null>(null);
 
   // The user's guess in pixel coords
-  const [userPin, setUserPin] = useState(null);
+  const [userPin, setUserPin] = useState<{x:number;y:number} | null>(null);
 
   // Control whether the map is expanded
   const [mapExpanded, setMapExpanded] = useState(false);
@@ -139,7 +139,7 @@ export default function GamePage() {
   const [showCorrectPin, setShowCorrectPin] = useState(false);
 
   // Modal state
-  const [modalMessage, setModalMessage] = useState(null);
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
 
   // Check for Google Maps script & pick a random place initially
   useEffect(() => {
@@ -158,7 +158,7 @@ export default function GamePage() {
     if (mapLoaded && currentPlace) {
       initStreetView();
     }
-  }, [mapLoaded, currentPlace]);
+  }, [mapLoaded, currentPlace, initStreetView]);
 // Define the state
 
 function pickRandomPlace() {
