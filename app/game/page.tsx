@@ -38,7 +38,7 @@ const places = [
   { lat: 1.2942524, lng: 103.7714807, label: "FASS" },
 ];
 
-function Modal({ message, onClose }) {
+function Modal({ message, onClose }: {message: string; onClose: () => void}) {
   return (
     <div
       style={{
