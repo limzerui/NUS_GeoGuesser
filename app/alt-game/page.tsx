@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
+type Place = {
+  lat: number;
+  lng: number;
+  label: string;
+  images: string[];
+};
+
 // 1) Define bounding box and map dimensions:
 const boundingBox = {
   minLat: 1.290643,
@@ -170,12 +177,6 @@ export default function AltGamePage() {
   const [score, setScore] = useState(0);
   const [round, setRound] = useState(1);
 
-type Place = {
-  lat: number;
-  lng: number;
-  label: string;
-  images: string[];
-};
   // Current location object
   const [currentPlace, setCurrentPlace] = useState<Place | null>(null);
 
