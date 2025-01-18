@@ -65,10 +65,55 @@ const places = [
   },
 ];
 
+function Modal({ message, onClose }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 3000,
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          textAlign: "center",
+        }}
+      >
+        <p>{message}</p>
+        <button
+          onClick={onClose}
+          style={{
+            marginTop: "10px",
+            padding: "10px 20px",
+            backgroundColor: "blue",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function GamePage() {
   const [score, setScore] = useState(0);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [currentPlace, setCurrentPlace] = useState(null);
+  const [round, setRound] = useState(1); // Track current round
 
   // We'll store the correct location's pixel coords for the current place
   const [correctPin, setCorrectPin] = useState(null);
@@ -81,6 +126,9 @@ export default function GamePage() {
 
   // Only show the correct pin (green pin / emoji) after pressing "Submit Guess"
   const [showCorrectPin, setShowCorrectPin] = useState(false);
+
+  // Modal state
+  const [modalMessage, setModalMessage] = useState(null);
 
   useEffect(() => {
     // Check for Google Maps script
@@ -151,14 +199,15 @@ export default function GamePage() {
     // Example scoring logic
     if (distance < 50) {
       setScore(score + 1);
-      alert(`Nice job! You were ${distance.toFixed(2)} pixels away. Score now: ${score + 1}`);
+      setModalMessage(`Nice job! You were ${distance.toFixed(2)} pixels away. Score now: ${score + 1}`);
     } else {
-      alert(`Too far! You were ${distance.toFixed(2)} pixels away. Score remains: ${score}`);
+      setModalMessage(`Too far! You were ${distance.toFixed(2)} pixels away. Score remains: ${score}`);
     }
   }
 
   function handleNextRound() {
     setShowCorrectPin(false);
+    setRound(round + 1); // Increment the round
     pickRandomPlace();
   }
 
@@ -177,6 +226,9 @@ export default function GamePage() {
 
   return (
     <div style={{ height: "100vh", position: "relative" }}>
+      {/* Modal for messages */}
+      {modalMessage && <Modal message={modalMessage} onClose={() => setModalMessage(null)} />}
+
       {/* Street View container */}
       <div id="street-view" style={{ height: "100%", width: "100%" }} />
 
@@ -193,6 +245,7 @@ export default function GamePage() {
         }}
       >
         <h2>Score: {score}</h2>
+        <h3>Round: {round} / 5</h3>
         <button onClick={() => setMapExpanded(true)}>Map Guess</button>
       </div>
 
