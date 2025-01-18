@@ -1,22 +1,4 @@
 // app/page.tsx
-/*
-import Link from "next/link";
-
-export default function Home() {
-  return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>NUS GeoGuesser</h1>
-      <Link href="/game" passHref>
-        <button
-          style={{ margin: "10px", padding: "10px 20px", cursor: "pointer" }}
-        >
-          Start Game
-        </button>
-      </Link>
-    </div>
-  );
-}
-*/
 
 import Link from "next/link";
 
@@ -105,5 +87,4 @@ export default function Home() {
     </div>
   );
 }
-
 

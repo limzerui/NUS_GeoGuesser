@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 // 1) Define bounding box and map dimensions:
 const boundingBox = {
-  minLat: 1.290643, 
+  minLat: 1.290643,
   maxLat: 1.307454,
   minLng: 103.766688,
   maxLng: 103.788455,
@@ -83,7 +83,7 @@ function Modal({ message, onClose }) {
 }
 
 export default function GamePage() {
-  const router = useRouter();      // <-- For redirection
+  const router = useRouter(); // <-- For redirection
   const [score, setScore] = useState(0);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [currentPlace, setCurrentPlace] = useState(null);
@@ -174,9 +174,9 @@ export default function GamePage() {
     if (distance < 50) {
       setScore(score + 1);
       setModalMessage(
-        `Nice job! You were ${distance.toFixed(
-          2
-        )} pixels away. Score now: ${score + 1}`
+        `Nice job! You were ${distance.toFixed(2)} pixels away. Score now: ${
+          score + 1
+        }`
       );
     } else {
       setModalMessage(
@@ -188,7 +188,7 @@ export default function GamePage() {
   }
 
   /**
-   * We remove the logic that automatically closes the map 
+   * We remove the logic that automatically closes the map
    * if the user clicks outside of it. Hence the map stays open
    * (and the guess remains) even after submission.
    */
@@ -206,7 +206,7 @@ export default function GamePage() {
   // }
 
   /**
-   * After 5 rounds, redirect to homepage. 
+   * After 5 rounds, redirect to homepage.
    * Otherwise, proceed to the next round as before.
    */
   function handleNextRound() {
@@ -223,7 +223,9 @@ export default function GamePage() {
   return (
     <div style={{ height: "100vh", position: "relative" }}>
       {/* Modal for messages */}
-      {modalMessage && <Modal message={modalMessage} onClose={() => setModalMessage(null)} />}
+      {modalMessage && (
+        <Modal message={modalMessage} onClose={() => setModalMessage(null)} />
+      )}
 
       {/* Street View container */}
       <div id="street-view" style={{ height: "100%", width: "100%" }} />
