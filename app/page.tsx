@@ -11,14 +11,14 @@ export default function Home() {
 
   useEffect(() => {
     // Load Classic Mode leaderboard
-    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard"));
+    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard")|| '{"highestScore":0, "mostRecentScore":0}');
     if (classicLeaderboard) {
       setClassicHighestScore(classicLeaderboard.highestScore || 0);
       setClassicMostRecentScore(classicLeaderboard.mostRecentScore || 0);
     }
 
     // Load Close-Up Challenge leaderboard
-    const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard"));
+    const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard") || '{"highestScore":0, "mostRecentScore":0}');
     if (altLeaderboard) {
       setAltHighestScore(altLeaderboard.highestScore || 0);
       setAltMostRecentScore(altLeaderboard.mostRecentScore || 0);

@@ -241,17 +241,13 @@ function handleNextRound() {
     const finalScore = score;
 
     // Retrieve current leaderboard or initialise it
-    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard")|| "{}") || {
-      highestScore: 0,
-      mostRecentScore: 0,
-    };
+    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard") || '{"highestScore":0,"mostRecentScore":0}');
 
     // Update leaderboard data
     classicLeaderboard.mostRecentScore = finalScore;
     if (finalScore > classicLeaderboard.highestScore) {
       classicLeaderboard.highestScore = finalScore;
     }
-
     // Save updated leaderboard back to localStorage
     localStorage.setItem("classicLeaderboard", JSON.stringify(classicLeaderboard));
 
