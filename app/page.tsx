@@ -1,8 +1,25 @@
-// app/page.tsx
+"use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function Home() {
+  const [highestScore, setHighestScore] = useState<number | null>(null);
+  const [mostRecentScore, setMostRecentScore] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Safely check localStorage (only runs on client)
+    const storedHigh = localStorage.getItem("highestScore");
+    const storedRecent = localStorage.getItem("mostRecentScore");
+
+    if (storedHigh !== null) {
+      setHighestScore(parseInt(storedHigh, 10));
+    }
+    if (storedRecent !== null) {
+      setMostRecentScore(parseInt(storedRecent, 10));
+    }
+  }, []);
+
   return (
     <div
       style={{
@@ -21,7 +38,7 @@ export default function Home() {
           marginBottom: "30px",
         }}
       >
-        NUS GeoGuesser
+        NUSGuesser
       </h1>
 
       {/* Leaderboard Section */}
@@ -54,7 +71,8 @@ export default function Home() {
             color: "#333",
           }}
         >
-          <strong>Highest Score:</strong> [Placeholder]
+          <strong>Highest Score:</strong>{" "}
+          {highestScore !== null ? highestScore : "[No score yet]"}
         </p>
         <p
           style={{
@@ -63,7 +81,8 @@ export default function Home() {
             color: "#333",
           }}
         >
-          <strong>Most Recent Score:</strong> [Placeholder]
+          <strong>Most Recent Score:</strong>{" "}
+          {mostRecentScore !== null ? mostRecentScore : "[No recent score]"}
         </p>
       </div>
 
@@ -87,4 +106,3 @@ export default function Home() {
     </div>
   );
 }
-

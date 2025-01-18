@@ -1,14 +1,13 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 // 1) Define bounding box and map dimensions:
 const boundingBox = {
-  minLat: 1.290643, 
+  minLat: 1.290643,
   maxLat: 1.307454,
   minLng: 103.766688,
   maxLng: 103.788455,
@@ -84,7 +83,7 @@ function Modal({ message, onClose }) {
 }
 
 export default function GamePage() {
-  const router = useRouter();      // <-- For redirection
+  const router = useRouter();
   const [score, setScore] = useState(0);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [currentPlace, setCurrentPlace] = useState(null);
@@ -123,6 +122,7 @@ export default function GamePage() {
     }
   }, [mapLoaded, currentPlace]);
 
+  // Randomly pick a place from 'places' and update correctPin
   function pickRandomPlace() {
     const place = places[Math.floor(Math.random() * places.length)];
     setCurrentPlace(place);
@@ -138,6 +138,7 @@ export default function GamePage() {
     setShowCorrectPin(false);
   }
 
+  // Initialize the Street View
   function initStreetView() {
     if (!currentPlace) return;
     new google.maps.StreetViewPanorama(document.getElementById("street-view"), {
@@ -155,6 +156,7 @@ export default function GamePage() {
     });
   }
 
+  // Handle map click, update the user's guess pin
   function handleMapClick(e) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -162,8 +164,24 @@ export default function GamePage() {
     setUserPin({ x, y });
   }
 
+  // Calculate the guess score from 0..1000
+  function getGuessScore(distance) {
+    if (distance <= 50) {
+      return 1000;
+    } else if (distance >= 500) {
+      return 0;
+    } else {
+      // Linear interpolation from 50..500 => 1000..0
+      const ratio = (500 - distance) / (500 - 50); // (450 range)
+      return Math.round(1000 * ratio);
+    }
+  }
+
+  // Handle guess submission
   function handleSubmitGuess() {
     if (!userPin || !correctPin) return;
+
+    // Distance in pixels between guess and correct pin
     const dx = userPin.x - correctPin.x;
     const dy = userPin.y - correctPin.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -171,45 +189,20 @@ export default function GamePage() {
     // Reveal the correct pin now
     setShowCorrectPin(true);
 
-    // Example scoring logic
-    if (distance < 50) {
-      setScore(score + 1);
-      setModalMessage(
-        `Nice job! You were ${distance.toFixed(
-          2
-        )} pixels away. Score now: ${score + 1}`
-      );
-    } else {
-      setModalMessage(
-        `Too far! You were ${distance.toFixed(
-          2
-        )} pixels away. Score remains: ${score}`
-      );
-    }
+    // Compute the round's score
+    const guessScore = getGuessScore(distance);
+    const newTotalScore = score + guessScore;
+    setScore(newTotalScore);
+
+    // Show a modal with results
+    setModalMessage(
+      `You were ${distance.toFixed(
+        2
+      )} pixels away. You earned ${guessScore} points. Your total score is now: ${newTotalScore}`
+    );
   }
 
-  /**
-   * We remove the logic that automatically closes the map 
-   * if the user clicks outside of it. Hence the map stays open
-   * (and the guess remains) even after submission.
-   */
-  // useEffect(() => {
-  //   if (mapExpanded) document.addEventListener("click", handleOutsideClick);
-  //   else document.removeEventListener("click", handleOutsideClick);
-  //   return () => document.removeEventListener("click", handleOutsideClick);
-  // }, [mapExpanded]);
-
-  // function handleOutsideClick(e) {
-  //   if (mapExpanded && !e.target.closest(".map-container")) {
-  //     setMapExpanded(false);
-  //     setUserPin(null);
-  //   }
-  // }
-
-  /**
-   * After 5 rounds, redirect to homepage. 
-   * Otherwise, proceed to the next round as before.
-   */
+  // Advance to the next round (or end the game after 5 rounds)
   function handleNextRound() {
     if (round === 5) {
       // Redirect to homepage after 5 rounds
@@ -224,7 +217,9 @@ export default function GamePage() {
   return (
     <div style={{ height: "100vh", position: "relative" }}>
       {/* Modal for messages */}
-      {modalMessage && <Modal message={modalMessage} onClose={() => setModalMessage(null)} />}
+      {modalMessage && (
+        <Modal message={modalMessage} onClose={() => setModalMessage(null)} />
+      )}
 
       {/* Street View container */}
       <div id="street-view" style={{ height: "100%", width: "100%" }} />
@@ -246,7 +241,7 @@ export default function GamePage() {
         <button onClick={() => setMapExpanded(true)}>Map Guess</button>
       </div>
 
-      {/* Map expand popup */}
+      {/* Map overlay to place guesses */}
       {mapExpanded && (
         <div
           className="map-container"
@@ -254,14 +249,14 @@ export default function GamePage() {
             position: "absolute",
             top: "50px",
             left: "50px",
-            width: "800px", // Real size so we can measure clicks accurately
+            width: "800px", // Real size for accurate click detection
             height: "600px",
             border: "2px solid black",
             zIndex: 2000,
           }}
           onClick={handleMapClick}
         >
-          <Image src="/map.jpg" alt="Map" layout="fill" objectFit="cover" />
+          <Image src="/map.jpg" alt="Map" fill style={{ objectFit: "cover" }} />
 
           {/* User's guess pin (red) */}
           {userPin && (
@@ -296,6 +291,7 @@ export default function GamePage() {
             </div>
           )}
 
+          {/* Submit Guess Button */}
           <button
             onClick={handleSubmitGuess}
             style={{
@@ -314,6 +310,7 @@ export default function GamePage() {
             Submit Guess
           </button>
 
+          {/* Next Round Button (only after guess is submitted) */}
           {showCorrectPin && (
             <button
               onClick={handleNextRound}
@@ -334,7 +331,7 @@ export default function GamePage() {
             </button>
           )}
 
-          {/* Optional: A separate "Close Map" button if needed */}
+          {/* Optional Close Map Button */}
           <button
             onClick={() => setMapExpanded(false)}
             style={{
