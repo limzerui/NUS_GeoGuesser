@@ -4,19 +4,32 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function Home() {
-  const [highestScore, setHighestScore] = useState<number | null>(null);
-  const [mostRecentScore, setMostRecentScore] = useState<number | null>(null);
+  const [classicHighestScore, setClassicHighestScore] = useState<number | null>(null);
+  const [classicMostRecentScore, setClassicMostRecentScore] = useState<number | null>(null);
+  const [altHighestScore, setAltHighestScore] = useState<number | null>(null);
+  const [altMostRecentScore, setAltMostRecentScore] = useState<number | null>(null);
 
   useEffect(() => {
-    // Safely check localStorage (only runs on client)
-    const storedHigh = localStorage.getItem("highestScore");
-    const storedRecent = localStorage.getItem("mostRecentScore");
+    // Load Classic Mode scores from localStorage
+    const storedClassicHigh = localStorage.getItem("classicHighestScore");
+    const storedClassicRecent = localStorage.getItem("classicMostRecentScore");
 
-    if (storedHigh !== null) {
-      setHighestScore(parseInt(storedHigh, 10));
+    if (storedClassicHigh !== null) {
+      setClassicHighestScore(parseInt(storedClassicHigh, 10));
     }
-    if (storedRecent !== null) {
-      setMostRecentScore(parseInt(storedRecent, 10));
+    if (storedClassicRecent !== null) {
+      setClassicMostRecentScore(parseInt(storedClassicRecent, 10));
+    }
+
+    // Load Close-Up Challenge scores from localStorage
+    const storedAltHigh = localStorage.getItem("altHighestScore");
+    const storedAltRecent = localStorage.getItem("altMostRecentScore");
+
+    if (storedAltHigh !== null) {
+      setAltHighestScore(parseInt(storedAltHigh, 10));
+    }
+    if (storedAltRecent !== null) {
+      setAltMostRecentScore(parseInt(storedAltRecent, 10));
     }
   }, []);
 
@@ -29,40 +42,44 @@ export default function Home() {
         justifyContent: "center",
         height: "100vh",
         fontFamily: "'Arial', sans-serif",
+        backgroundColor: "#F8F9FA", // Light grey background
       }}
     >
       <h1
         style={{
-          fontSize: "3rem",
-          color: "#333",
+          fontSize: "3.5rem",
+          color: "#0057A8", // NUS Blue
           marginBottom: "30px",
+          textTransform: "uppercase",
+          fontWeight: "bold",
         }}
       >
-        NUSGuesser
+        NUS Guesser
       </h1>
 
-      {/* Leaderboard Section */}
+      {/* Classic Mode Leaderboard */}
       <div
         style={{
           width: "80%",
           maxWidth: "500px",
           padding: "20px",
           marginBottom: "30px",
-          border: "2px solid #ccc",
+          border: "2px solid #0057A8", // Blue border
           borderRadius: "10px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)", // Slight shadow
           textAlign: "center",
-          backgroundColor: "#f9f9f9",
+          backgroundColor: "#FFFFFF", // White background
         }}
       >
         <h2
           style={{
-            fontSize: "1.5rem",
-            color: "#555",
+            fontSize: "1.8rem",
+            color: "#F58025", // NUS Orange
             marginBottom: "20px",
+            fontWeight: "bold",
           }}
         >
-          Leaderboard
+          Classic Mode Leaderboard
         </h2>
         <p
           style={{
@@ -72,7 +89,7 @@ export default function Home() {
           }}
         >
           <strong>Highest Score:</strong>{" "}
-          {highestScore !== null ? highestScore : "[No score yet]"}
+          {classicHighestScore !== null ? classicHighestScore : "[No score yet]"}
         </p>
         <p
           style={{
@@ -82,46 +99,104 @@ export default function Home() {
           }}
         >
           <strong>Most Recent Score:</strong>{" "}
-          {mostRecentScore !== null ? mostRecentScore : "[No recent score]"}
+          {classicMostRecentScore !== null
+            ? classicMostRecentScore
+            : "[No recent score]"}
         </p>
       </div>
 
-       {/* Start Game Button */}
-       <Link href="/game" passHref>
+      {/* Close-Up Challenge Leaderboard */}
+      <div
+        style={{
+          width: "80%",
+          maxWidth: "500px",
+          padding: "20px",
+          marginBottom: "30px",
+          border: "2px solid #F58025", // Orange border
+          borderRadius: "10px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)", // Slight shadow
+          textAlign: "center",
+          backgroundColor: "#FFFFFF", // White background
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "1.8rem",
+            color: "#0057A8", // NUS Blue
+            marginBottom: "20px",
+            fontWeight: "bold",
+          }}
+        >
+          Close-Up Challenge Leaderboard
+        </h2>
+        <p
+          style={{
+            fontSize: "1.2rem",
+            margin: "10px 0",
+            color: "#333",
+          }}
+        >
+          <strong>Highest Score:</strong>{" "}
+          {altHighestScore !== null ? altHighestScore : "[No score yet]"}
+        </p>
+        <p
+          style={{
+            fontSize: "1.2rem",
+            margin: "10px 0",
+            color: "#333",
+          }}
+        >
+          <strong>Most Recent Score:</strong>{" "}
+          {altMostRecentScore !== null
+            ? altMostRecentScore
+            : "[No recent score]"}
+        </p>
+      </div>
+
+      {/* Start Game Button */}
+      <Link href="/game" passHref>
         <button
           style={{
             padding: "15px 30px",
             fontSize: "1.2rem",
             fontWeight: "bold",
-            color: "#fff",
-            backgroundColor: "#007BFF",
+            color: "#FFFFFF",
+            backgroundColor: "#0057A8", // NUS Blue
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
-            marginBottom: "10px",
+            marginBottom: "15px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Add a button shadow
+            transition: "transform 0.2s ease",
           }}
         >
-          Start Game
+          Classic Mode
         </button>
       </Link>
 
-      {/* Alt Game Button */}
+      {/* Close-Up Challenge Button */}
       <Link href="/alt-game" passHref>
         <button
           style={{
             padding: "15px 30px",
             fontSize: "1.2rem",
             fontWeight: "bold",
-            color: "#fff",
-            backgroundColor: "#28a745", // Green colour for differentiation
+            color: "#FFFFFF",
+            backgroundColor: "#F58025", // NUS Orange
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Add a button shadow
+            transition: "transform 0.2s ease",
           }}
         >
-          Alternative Game
+          Close-Up Challenge
         </button>
       </Link>
     </div>
   );
 }
+
+
+
+
