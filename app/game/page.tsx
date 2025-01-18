@@ -184,7 +184,7 @@ function pickRandomPlace() {
   setShowCorrectPin(false);
 }
 
-
+/*
   function initStreetView() {
     if (!currentPlace) return;
     new google.maps.StreetViewPanorama(document.getElementById("street-view"), {
@@ -201,7 +201,7 @@ function pickRandomPlace() {
       addressControl: false,
     });
   }
-
+*/
   // When user clicks on the map, set the guess pin
   function handleMapClick(e) {
     const rect = e.currentTarget.getBoundingClientRect();
