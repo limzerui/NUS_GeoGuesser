@@ -17,7 +17,7 @@ const MAP_WIDTH = 800; // The real size of map.jpg
 const MAP_HEIGHT = 600;
 
 // Helper function: lat/lng -> (x, y) pixels on the JPG
-function latLngToPixel(lat, lng) {
+function latLngToPixel(lat:number, lng:number):{x:number; y:number} {
   const latRange = boundingBox.maxLat - boundingBox.minLat;
   const lngRange = boundingBox.maxLng - boundingBox.minLng;
 
