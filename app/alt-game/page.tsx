@@ -205,7 +205,7 @@ type Place = {
 
   // Pick a random place, reset pins, etc.
   function pickRandomPlace() {
-    const randomIndex = Math.floor(Math.random() * altPlaces.length);
+    //const randomIndex = Math.floor(Math.random() * altPlaces.length);
     const place = altPlaces[Math.floor(Math.random() * altPlaces.length)];
     setCurrentPlace(place);
 

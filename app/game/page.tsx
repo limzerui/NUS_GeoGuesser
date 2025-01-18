@@ -95,6 +95,7 @@ function getGuessScore(distance) {
   return Math.round(1000 * ratio);
 }
 
+/*
 function saveScoresToLeaderboard(finalScore) {
   // Save scores specifically for Classic Mode
   const storedHighScore = localStorage.getItem("classicHighestScore");
@@ -108,7 +109,7 @@ function saveScoresToLeaderboard(finalScore) {
     localStorage.setItem("classicHighestScore", finalScore.toString());
   }
 }
-
+*/
 
 
 export default function GamePage() {
