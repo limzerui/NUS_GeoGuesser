@@ -88,7 +88,7 @@ function Modal({ message, onClose }: {message: string; onClose: () => void}) {
  * - distance >= 500px --> 0 points
  * - else linear interpolation in [50..500] => [1000..0]
  */
-function getGuessScore(distance) {
+function getGuessScore(distance:number):number {
   if (distance <= 50) return 1000;
   if (distance >= 500) return 0;
   const ratio = (500 - distance) / (450); // 500-50 = 450
