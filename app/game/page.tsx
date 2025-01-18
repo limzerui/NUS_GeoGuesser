@@ -241,7 +241,7 @@ function handleNextRound() {
     const finalScore = score;
 
     // Retrieve current leaderboard or initialise it
-    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard")) || {
+    const classicLeaderboard = JSON.parse(localStorage.getItem("classicLeaderboard")|| "{}") || {
       highestScore: 0,
       mostRecentScore: 0,
     };
