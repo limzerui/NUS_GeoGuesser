@@ -12,7 +12,6 @@ type Place = {
   images: string[];
 };
 
-// 1) Define bounding box and map dimensions:
 const boundingBox = {
   minLat: 1.290643,
   maxLat: 1.307454,
@@ -35,16 +34,15 @@ function latLngToPixel(lat: number, lng: number):{x:number; y:number} {
 }
 
 // 2) Places array with lat/lng + array of 3 images
-//    Reordered so that (1.jpg) -> (2.jpg) -> (3.jpg)
 const altPlaces: Place[] = [
   {
     lat: 1.304203,
     lng: 103.7736519,
     label: "Fine Food",
     images: [
-      "/alt-maps/finefood1.jpg", // index 0
-      "/alt-maps/finefood2.jpg", // index 1
-      "/alt-maps/finefood3.jpg", // index 2
+      "/alt-maps/finefood1.jpg", 
+      "/alt-maps/finefood2.jpg", 
+      "/alt-maps/finefood3.jpg", 
     ],
   },
   {
@@ -52,9 +50,9 @@ const altPlaces: Place[] = [
     lng: 103.7744331,
     label: "UtownBusStop",
     images: [
-      "/alt-maps/utownbusstop1.jpg", // index 0
-      "/alt-maps/utownbusstop2.jpg", // index 1
-      "/alt-maps/utownbusstop3.jpg", // index 2
+      "/alt-maps/utownbusstop1.jpg",
+      "/alt-maps/utownbusstop2.jpg",
+      "/alt-maps/utownbusstop3.jpg",
     ],
   },
   {
@@ -62,9 +60,9 @@ const altPlaces: Place[] = [
     lng:103.77166,
     label: "EA",
     images: [
-      "/alt-maps/EA1.jpg", // index 0
-      "/alt-maps/EA2.jpg", // index 1
-      "/alt-maps/EA3.jpg", // index 2
+      "/alt-maps/EA1.jpg",
+      "/alt-maps/EA2.jpg",
+      "/alt-maps/EA3.jpg",
     ]
   },
   {
@@ -83,9 +81,9 @@ const altPlaces: Place[] = [
     lng:103.77042,
     label: "Eusoff",
     images: [
-      "/alt-maps/eusoff1.jpg", // index 0
-      "/alt-maps/eusoff2.jpg", // index 1
-      "/alt-maps/eusoff3.jpg", // index 2
+      "/alt-maps/eusoff1.jpg", 
+      "/alt-maps/eusoff2.jpg", 
+      "/alt-maps/eusoff3.jpg", 
     ]
   },
   {
@@ -93,9 +91,9 @@ const altPlaces: Place[] = [
     lng:103.78418,
     label: "NUH",
     images: [
-      "/alt-maps/nuh1.jpg", // index 0
-      "/alt-maps/nuh2.jpg", // index 1
-      "/alt-maps/nuh3.jpg", // index 2
+      "/alt-maps/nuh1.jpg", 
+      "/alt-maps/nuh2.jpg", 
+      "/alt-maps/nuh3.jpg", 
     ]
   },
   // ... add more places if needed
@@ -152,7 +150,6 @@ function Modal({
   );
 }
 
-// ADDED
 function saveScoresToLeaderboard(finalScore:number) {
   // Retrieve the existing leaderboard or initialise with default values
   const altLeaderboard = JSON.parse(localStorage.getItem("altLeaderboard") || "{}") ||{
