@@ -4,10 +4,8 @@
 
 **NUS GeoGuesser** is a hackathon project done in 12 hours for Hack&Roll, in which it won the award -- "Most Commendable Projects". It is a fun, interactive web application that challenges you to guess locations across the National University of Singapore (NUS) campus. It offers **two distinct game modes**, each with unique mechanics and levels of difficulty. The application is deployed on [Vercel](https://nus-geo-guesser-2-o9raeei99-zeruis-projects-638c0957.vercel.app/), making it easily accessible to anyone.
 
-###Classic Game Mode
+##Classic Game Mode
 https://github.com/user-attachments/assets/d82c2589-c9a5-4e66-97ad-f788de6d1486
-###Close-up Game Mode
-https://github.com/user-attachments/assets/b6aefbeb-5e74-4d95-b753-d273895e3be6
 
 
 ---
