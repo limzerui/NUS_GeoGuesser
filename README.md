@@ -27,7 +27,7 @@
 2. **Scoring**: The closer your guess is to the actual location, the more points you score (ranging from 0 to 1000).  
 3. **Rounds**: Progress through multiple rounds, each picking a new random location.
 
-### Close-up Mode
+### Close-Up Challenge
 1. **Image-Based Clues**: Instead of Street View, you see **three static images** of a location — from hardest clue (close-up) to easiest (wide shot).  
 2. **Hint Progression**: You can click **Next Hint** to reveal a clearer image.  
 3. **Difficulty Multiplier**: Guessing correctly on the first image yields higher points compared to the second or third.  
@@ -50,8 +50,8 @@
 ## Scaling of Difficulty
 
 1. **Zooming Mechanics (Classic)**: Street View typically starts from a moderate zoom, forcing you to rotate around, identify landmarks, and guess carefully.
-2. **Clue-Based (Close-up)**: The first image is zoomed in or more cryptic, the second is moderately revealing, and the third is often a wide or iconic shot. This progression simulates “zooming out” in difficulty over successive hints.
-3. **Score Multiplier (Close-up)**: Earning higher points for guessing earlier images ensures a risk–reward element. You can guess as soon as you think you know or wait for a better hint at the cost of fewer possible points.
+2. **Clue-Based (Close-Up Challenge)**: The first image is zoomed in or more cryptic, the second is moderately revealing, and the third is often a wide or iconic shot. This progression simulates “zooming out” in difficulty over successive hints.
+3. **Score Multiplier (Close-Up Challenge)**: Earning higher points for guessing earlier images ensures a risk–reward element. You can guess as soon as you think you know or wait for a better hint at the cost of fewer possible points.
 
 ---
 
