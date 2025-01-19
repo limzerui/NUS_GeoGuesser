@@ -50,8 +50,8 @@
 ## Scaling of Difficulty
 
 1. **Zooming Mechanics (Classic)**: Street View typically starts from a moderate zoom, forcing you to rotate around, identify landmarks, and guess carefully.
-2. **Clue-Based (Alt-Game)**: The first image is zoomed in or more cryptic, the second is moderately revealing, and the third is often a wide or iconic shot. This progression simulates “zooming out” in difficulty over successive hints.
-3. **Score Multiplier (Alt-Game)**: Earning higher points for guessing earlier images ensures a risk–reward element. You can guess as soon as you think you know or wait for a better hint at the cost of fewer possible points.
+2. **Clue-Based (Close-Up Challenge)**: The first image is zoomed in or more cryptic, the second is moderately revealing, and the third is often a wide or iconic shot. This progression simulates “zooming out” in difficulty over successive hints.
+3. **Score Multiplier (Close-Up Challenge)**: Earning higher points for guessing earlier images ensures a risk–reward element. You can guess as soon as you think you know or wait for a better hint at the cost of fewer possible points.
 
 ---
 
