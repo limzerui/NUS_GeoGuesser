@@ -46,7 +46,7 @@ export default function Home() {
           fontWeight: "bold",
         }}
       >
-        NUS Guesser Leaderboards
+        NUSGuessr Leaderboards
       </h1>
 
       {/* Classic Mode Leaderboard */}

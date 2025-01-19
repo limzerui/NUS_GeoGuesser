@@ -8,11 +8,11 @@
 
 ## Features
 
-- **Two Distinct Game Modes**: Choose between the “Classic” Street View-based mode or the image-based “Alt-Game” mode.
+- **Two Distinct Game Modes**: Choose between the “Classic” Street View-based mode or the image-based “Close-up” mode.
 - **Progressive Rounds**: Each game consists of a series of rounds (e.g., 5). Your points accumulate to a final score.
 - **Difficulty Scaling**:  
   - **Classic Mode**: Start zoomed in at a random Street View location. Each guess transitions you to the next round.  
-  - **Alt-Game Mode**: Three images for each location, offering increasing clarity (first image is the trickiest, last image is the easiest).
+  - **Close-up Mode**: Three images for each location, offering increasing clarity (first image is the trickiest, last image is the easiest).
 - **Interactive Map**: Click on the map to pinpoint your guess, and the application shows both your guess and the true location.
 - **Local Leaderboard**: Your most recent and highest scores are stored locally in your browser. This data persists between sessions.
 - **User-Friendly UI**: Clean interface with intuitive buttons, modals, and progress tracking.
@@ -27,7 +27,7 @@
 2. **Scoring**: The closer your guess is to the actual location, the more points you score (ranging from 0 to 1000).  
 3. **Rounds**: Progress through multiple rounds, each picking a new random location.
 
-### Alt-Game Mode
+### Close-up Mode
 1. **Image-Based Clues**: Instead of Street View, you see **three static images** of a location — from hardest clue (close-up) to easiest (wide shot).  
 2. **Hint Progression**: You can click **Next Hint** to reveal a clearer image.  
 3. **Difficulty Multiplier**: Guessing correctly on the first image yields higher points compared to the second or third.  
@@ -50,8 +50,8 @@
 ## Scaling of Difficulty
 
 1. **Zooming Mechanics (Classic)**: Street View typically starts from a moderate zoom, forcing you to rotate around, identify landmarks, and guess carefully.
-2. **Clue-Based (Alt-Game)**: The first image is zoomed in or more cryptic, the second is moderately revealing, and the third is often a wide or iconic shot. This progression simulates “zooming out” in difficulty over successive hints.
-3. **Score Multiplier (Alt-Game)**: Earning higher points for guessing earlier images ensures a risk–reward element. You can guess as soon as you think you know or wait for a better hint at the cost of fewer possible points.
+2. **Clue-Based (Close-up)**: The first image is zoomed in or more cryptic, the second is moderately revealing, and the third is often a wide or iconic shot. This progression simulates “zooming out” in difficulty over successive hints.
+3. **Score Multiplier (Close-up)**: Earning higher points for guessing earlier images ensures a risk–reward element. You can guess as soon as you think you know or wait for a better hint at the cost of fewer possible points.
 
 ---
 
