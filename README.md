@@ -8,7 +8,7 @@
 
 ## Features
 
-- **Two Distinct Game Modes**: Choose between the “Classic” Street View-based mode or the image-based “Alt-Game” mode.
+- **Two Distinct Game Modes**: Choose between the “Classic” Street View-based mode or the image-based “Close-Up Challenge” mode.
 - **Progressive Rounds**: Each game consists of a series of rounds (e.g., 5). Your points accumulate to a final score.
 - **Difficulty Scaling**:  
   - **Classic Mode**: Start zoomed in at a random Street View location. Each guess transitions you to the next round.  
@@ -27,7 +27,7 @@
 2. **Scoring**: The closer your guess is to the actual location, the more points you score (ranging from 0 to 1000).  
 3. **Rounds**: Progress through multiple rounds, each picking a new random location.
 
-### Alt-Game Mode
+### Close-Up Challenge
 1. **Image-Based Clues**: Instead of Street View, you see **three static images** of a location — from hardest clue (close-up) to easiest (wide shot).  
 2. **Hint Progression**: You can click **Next Hint** to reveal a clearer image.  
 3. **Difficulty Multiplier**: Guessing correctly on the first image yields higher points compared to the second or third.  
